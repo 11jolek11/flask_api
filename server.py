@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, redirect, url_for 
+from flask import Flask, flash, request, redirect, url_for, jsonify
 import os
 from werkzeug.utils import secure_filename
 
@@ -15,7 +15,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def list_files():
-
+    files = []
+    for entry in os.listdir(UPLOAD_FOLDER):
+        if os.path.isfile(os.path.join(UPLOAD_FOLDER, entry)):
+            files.append(entry)
+    resp = jsonify({'files': files})
+    resp.status_code = 200
+    return resp
     pass
 
 
@@ -31,9 +37,8 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return '''
-            <form method=post enctype=multipart/form-data>
-            <input type=file name=file>
-            <input type=submit value=Upload>
-            </form>'''
+    return
 
+
+if __name__ == "__main__":
+    app.run()
