@@ -37,19 +37,24 @@ def get_line(file):
         resp.status_code = 200
     return resp
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['GET','POST'])
 def upload_file():
-    if 'file' not in request.files:
-        return redirect(request.url)
-    file = request.files['file']
-    if file.filename == '':
-        return redirect(request.url)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        resp = jsonify({'message': "File transfer completed"})
-        resp.status_code = 201
-        return resp
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            # FIXME: 
+            print('no file found')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            print("Empty file")
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            resp = jsonify({'message': "File transfer completed"})
+            resp.status_code = 201
+            return resp
+    return jsonify({'message': "Error 500"})
 
 
 if __name__ == "__main__":
