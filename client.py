@@ -36,7 +36,7 @@ def get_line(host: str,file:str, line: int):
     print(req.url)
     code = req.status_code
     if code != 200:
-        print('Server error: ' + code)
+        print('Server error: ' + str(code))
         return int(code)
     else:
         resp = req.json()['content']
@@ -46,12 +46,7 @@ def get_line(host: str,file:str, line: int):
 
 if __name__ == "__main__":
     download_file_list('http://localhost:5000')
-    #get_line('http://localhost:5000', 'text.txt', 1)
-    send_file('http://localhost:5000', './test.txt')
+    print("###################")
+    send_file('http://localhost:5000', './poc.txt')
+    get_line('http://localhost:5000', 'poc.txt', 6)
     download_file_list('http://localhost:5000')
-
-
-
-
-
-
