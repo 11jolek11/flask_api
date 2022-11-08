@@ -1,0 +1,7 @@
+jeden
+dwa
+trzy
+cztery
+pięc
+szesc
+siedem
